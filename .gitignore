@@ -3,3 +3,4 @@ __pycache__
 Untitled.ipynb
 project.pdf
 *.csv
+.ipynb_checkpoints
