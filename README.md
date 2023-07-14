@@ -76,7 +76,7 @@ To have accurate results, you should run the code for about 100000 surgery reque
 
 | ![analyze.py output](./assets/1.png) | |
 |:----:|:-----:|
-|`analyze.py` output | Average completion time |
+|`analyze.py` output | |
 | ![avg_surgery_time output](./assets/part_a_avg_surgery_time.png) | ![avg_surgery_cost figure](./assets/part_a_avg_surgery_cost.png)
 |Average surgery time | Average surgery cost |
 | ![part_a_IO figure](./assets/part_a_IO_rate.png) | ![avg_comple_time figure](./assets/part_a_avg_compl_time.png)
