@@ -1,7 +1,6 @@
 import numpy as np
-from surgery import Surgery
-from log import LogType
-from __init__ import logger
+from part_b import *
+from part_b.surgery import Surgery
 
 def genNumRequests(num_slots, rate_coef):
     A_num_req = np.random.poisson(0.2*8*rate_coef, num_slots)

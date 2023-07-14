@@ -1,14 +1,13 @@
 import numpy as np
-from hospital import Hospital
-from surgery import Surgery
-from utils import *
-from log import LogType
-from __init__ import logger
+from main.hospital import Hospital
+from part_b import *
+from part_b.surgery import Surgery
+from part_b.utils import *
 import csv
 
 DA_phase = 0
 
-def initParams(num_slots, rate_coef):
+def initParams(num_slots, rate_coef, waiting_slot):
     # np.random.seed(42)
 
     # Create hospitals:
@@ -19,19 +18,31 @@ def initParams(num_slots, rate_coef):
 
     # Create all requests and their queue:
     reqs = genRequests(num_slots, rate_coef)
-    all_surgs = createSurgeries(reqs)
+    all_surgs = createSurgeries(reqs, waiting_slot)
     surg_queue = createQueue(all_surgs)
 
     return hospitals, surg_queue
 
-def selectRequests(queue, timestamp):
+def selectRequests(hospitals, queue, timestamp):
     current_surgs = []
     index = 0
     # Either 3 requests have been selected or we are in the current slot
     while index < len(queue) and \
           len(current_surgs) < 3 and \
           queue[index].creation_time <= timestamp + 8:
-        current_surgs.append(queue[index])
+        # check whether surgery participates or not
+        opt_hosp = queue[index].proposeOptimal()
+        if opt_hosp is None:
+            # Must participate
+            current_surgs.append(queue[index])
+        else:
+            # Check whether optimal hospital is empty
+            if hospitals[opt_hosp].empty:
+                # Then participate
+                current_surgs.append(queue[index])
+            else:
+                # Reduce waiting slot and wait
+                queue[index].waiting_slot -= 1
         index += 1
 
     return current_surgs, index
@@ -81,11 +92,11 @@ def calRequestRate(surgs: list[Surgery]) -> tuple[float]:
     num_surgs = len(surgs)
     return num_surgs/max_in_time, num_surgs/max_out_time
 
-def main(num_slots, rate_coef):
+def main(num_slots, rate_coef, waiting_slot):
     # initalize algorithm
     timestamp = 0
     completed_surg = []
-    hospitals, surg_queue = initParams(num_slots, rate_coef)
+    hospitals, surg_queue = initParams(num_slots, rate_coef, waiting_slot)
 
     # Run algorithm:
     while len(surg_queue):
@@ -94,7 +105,7 @@ def main(num_slots, rate_coef):
         # Empty finished hospitals:
         emptyFinshedHospitals(hospitals)
 
-        current_surgs, index = selectRequests(surg_queue, timestamp)
+        current_surgs, index = selectRequests(hospitals, surg_queue, timestamp)
 
         logger.log("Current surgeries: ", end="")
         for tmp in current_surgs:
@@ -164,11 +175,14 @@ if __name__ == "__main__":
     num_slots = int(input())
     print("Enter rate_conf: ", end="")
     rate_coef = float(input())
+    print("Enter K: ", end="")
+    waiting_slots = int(input())
+
     for i in range(N):
         DA_phase = 0
         logger.log(100*"-", log_type=LogType.INFO)
         logger.log(f"At run {i}:", log_type=LogType.INFO)
-        results = main(num_slots, rate_coef)
+        results = main(num_slots, rate_coef, waiting_slots)
         all_results.append(results)
 
     # Write to file

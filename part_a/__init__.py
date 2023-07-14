@@ -1,3 +1,3 @@
-from log import Logger, LogType
+from main.log import Logger, LogType
 
 logger = Logger(LogType.INFO)
