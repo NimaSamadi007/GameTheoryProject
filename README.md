@@ -2,7 +2,10 @@
 This repository contains my implementation of Game Theory course final project which was hold in Spring 2023 semester. A short explanation of the problem, strcutre of the code, how to run it, and results will be mentioned in this document.
 
 **Contents:**
-
++ [Project Defenition](#project-defenition)
++ [Code Structure](#code-structure)
++ [How to Run](#how-to-run)
++ [Results](#results)
 
 ## Project Defenition
 The Persian version of the project is provided in this repository, name as `project.pdf`. We want to implement stable matching algorithm for a given scenario. For more information on the algorithm itself, refer to [Wikipedia](https://en.wikipedia.org/wiki/Stable_marriage_problem). 
